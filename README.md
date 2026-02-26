@@ -403,6 +403,27 @@ If you want to modify the code:
     # uv run start
     ```
 
+  ### Local API Testing (HTTP) for this workspace
+
+  This workspace also includes a local HTTP MCP server script and a comprehensive integration test suite.
+
+  1. **Set required environment variables** (at minimum):
+    - `GOOGLE_CLIENT_ID`
+    - `GOOGLE_CLIENT_SECRET`
+  2. **Start the local server**:
+    ```bash
+    uv run --env-file .env src/server-test.py
+    ```
+    The server runs on `http://127.0.0.1:8000/mcp`.
+  3. **Run the full API test suite** (in a second terminal):
+    ```bash
+    uv run test.py
+    ```
+
+  The test suite covers all currently implemented tools, including both modes for `update_single_cell` and `batch_update_cells`.
+
+  📘 See [`guide.md`](guide.md) for full request/response examples and accepted payload formats per tool.
+
 ### Method 3: Docker (SSE transport)
 
 Run the server in a container using the included `Dockerfile`:

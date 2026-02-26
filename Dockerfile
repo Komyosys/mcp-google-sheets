@@ -1,45 +1,30 @@
-FROM alpine:latest AS base
+# Use the official Python image with uv pre-installed
+FROM ghcr.io/astral-sh/uv:python3.13-bookworm-slim
 
+# Set the working directory inside the container
 WORKDIR /app
-# Set environment variables for non-interactive installs and minimal locale
-ENV LANG=C.UTF-8
 
-# Update and install basic packages for a low resource machine
-RUN apk update && \
-    apk upgrade && \
-    apk add --no-cache \
-        bash \
-        curl \
-        tini \
-        curl \
-        coreutils \
-        git
+# Enable bytecode compilation for improved startup performance
+ENV UV_COMPILE_BYTECODE=1
 
-# Set tini as the init system to handle PID 1
-ENTRYPOINT ["/sbin/tini", "--"]
 
-RUN curl -LsSf https://astral.sh/uv/install.sh | sh
+# Copy the project's dependency files into the image
+COPY pyproject.toml uv.lock /app/
 
-# Ensure uv is on PATH (installer places it in /root/.local/bin for root)
-ENV PATH="/root/.local/bin:${PATH}"
+# Install the project's dependencies using the lockfile
+RUN --mount=type=cache,target=/root/.cache/uv ["uv","sync","--frozen","--no-install-project","--no-dev"]
+RUN --mount=type=cache,target=/root/.cache/uv ["uv","sync","--frozen","--no-dev"]
+# Copy the rest of the application code into the image
+COPY . /app
 
-COPY .python-version .
+# Install the project itself
+RUN --mount=type=cache,target=/root/.cache/uv \
+    uv sync --frozen --no-dev
 
-RUN uv venv
+# Ensure the virtual environment's binaries are in the PATH
+ENV PATH="/app/.venv/bin:$PATH"
 
-FROM base AS builder
 
-COPY . .
 
-RUN uv sync
-
-# Build the project (produces dist/*.whl)
-RUN uv build
-
-FROM base AS runner
-
-COPY --from=builder /app/dist/*.whl /app/
-
-RUN uv pip install /app/*.whl
-
-CMD ["uv", "run", "mcp-google-sheets", "--transport", "sse"]
+# Set the default command to run the SERVER
+CMD ["uv","run","server.py"]
