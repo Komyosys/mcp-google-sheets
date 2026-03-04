@@ -70,11 +70,10 @@ async def get_fresh_access_token(user_id: str) -> Dict[str, Any]:
     """
     _log_function_call("get_fresh_access_token", user_id=user_id)
     print(colored(f"[get_fresh_access_token] Requesting token for user_id={user_id}", "yellow"))
-    payload = {"user_id": user_id}
 
     async with httpx.AsyncClient(timeout=15.0) as client:
         try:
-            response = await client.post(TOKEN_ENDPOINT, json=payload)
+            response = await client.get(f"{TOKEN_ENDPOINT}/{user_id}")
             response.raise_for_status()
             print(colored(f"[get_fresh_access_token] Token endpoint success for user_id={user_id}", "green"))
             _log_function_status("get_fresh_access_token", True)
@@ -129,8 +128,7 @@ async def _get_authorized_gspread(user_id: str) -> gspread.Client:
             client_secret=GOOGLE_CLIENT_SECRET,
             token_uri="https://oauth2.googleapis.com/token",
             scopes=[
-                "https://www.googleapis.com/auth/spreadsheets",
-                "https://www.googleapis.com/auth/drive",
+                "https://www.googleapis.com/auth/drive.file",
             ],
         )
 
@@ -230,8 +228,7 @@ async def get_sheet_data(
         client_secret=GOOGLE_CLIENT_SECRET,
         token_uri="https://oauth2.googleapis.com/token",
         scopes=[
-            "https://www.googleapis.com/auth/spreadsheets",
-            "https://www.googleapis.com/auth/drive.readonly",  # often enough for reading
+            "https://www.googleapis.com/auth/drive.file",  # often enough for reading
         ],
     )
 
@@ -352,8 +349,7 @@ async def get_sheet_formulas(
         client_secret=GOOGLE_CLIENT_SECRET,
         token_uri="https://oauth2.googleapis.com/token",
         scopes=[
-            "https://www.googleapis.com/auth/spreadsheets",
-            "https://www.googleapis.com/auth/drive.readonly",
+            "https://www.googleapis.com/auth/drive.file",
         ],
     )
 
