@@ -1,0 +1,31 @@
+services:
+  mcp-google-sheet:
+    build:
+      context: .
+    image: mcp-google-sheet:latest
+    container_name: mcp-google-sheet
+    restart: unless-stopped
+
+    env_file:
+      - .env
+
+    volumes:
+      - ./secrets:/data
+
+    networks:
+      - traefik
+
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=traefik-global_default"
+
+      - "traefik.http.routers.mcp-google-sheet.rule=Host(`mcp-google-sheet.komyosys.ai`)"
+      - "traefik.http.routers.mcp-google-sheet.entrypoints=websecure"
+      - "traefik.http.routers.mcp-google-sheet.tls=true"
+      - "traefik.http.routers.mcp-google-sheet.tls.certresolver=mytls"
+      - "traefik.http.services.mcp-google-sheet.loadbalancer.server.port=8000"
+
+networks:
+  traefik:
+    external: true
+    name: traefik-global_default

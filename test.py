@@ -26,8 +26,8 @@ except ImportError:
         return text
 
 
-SERVER_URL = os.getenv("MCP_SERVER_URL", "http://127.0.0.1:8000/mcp")
-USER_ID = os.getenv("MCP_USER_ID", "751b450e-46c3-4c02-b33f-0b4d71f1bfdb")
+SERVER_URL = os.getenv("MCP_SERVER_URL", "http://mcp-google-sheets.komyosys.ai/mcp")
+USER_ID = os.getenv("MCP_USER_ID", "")
 SPREADSHEET_ID = os.getenv("MCP_SPREADSHEET_ID", "muhammad_ahmad_accountio_journal_sheet")
 BASE_SHEET = os.getenv("MCP_BASE_SHEET", "Ledger")
 

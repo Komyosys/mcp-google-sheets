@@ -129,8 +129,7 @@ async def _get_authorized_gspread(user_id: str) -> gspread.Client:
             client_secret=GOOGLE_CLIENT_SECRET,
             token_uri="https://oauth2.googleapis.com/token",
             scopes=[
-                "https://www.googleapis.com/auth/spreadsheets",
-                "https://www.googleapis.com/auth/drive",
+                "https://www.googleapis.com/auth/drive.file",
             ],
         )
 
@@ -230,8 +229,7 @@ async def get_sheet_data(
         client_secret=GOOGLE_CLIENT_SECRET,
         token_uri="https://oauth2.googleapis.com/token",
         scopes=[
-            "https://www.googleapis.com/auth/spreadsheets",
-            "https://www.googleapis.com/auth/drive.readonly",  # often enough for reading
+            "https://www.googleapis.com/auth/drive.file",  # often enough for reading
         ],
     )
 
@@ -352,8 +350,7 @@ async def get_sheet_formulas(
         client_secret=GOOGLE_CLIENT_SECRET,
         token_uri="https://oauth2.googleapis.com/token",
         scopes=[
-            "https://www.googleapis.com/auth/spreadsheets",
-            "https://www.googleapis.com/auth/drive.readonly",
+            "https://www.googleapis.com/auth/drive.file",
         ],
     )
 
