@@ -26,6 +26,8 @@ TOKEN_ENDPOINT = "https://accountio-backend.komyosys.ai/google/get_token"
 # These should come from environment variables in production
 GOOGLE_CLIENT_ID = os.environ.get("GOOGLE_CLIENT_ID")
 GOOGLE_CLIENT_SECRET = os.environ.get("GOOGLE_CLIENT_SECRET")
+HOST = os.environ.get("HOST") or "127.0.0.1"
+PORT_STR = os.environ.get("PORT") or "8000"
 
 if not GOOGLE_CLIENT_ID or not GOOGLE_CLIENT_SECRET:
     raise ValueError("GOOGLE_CLIENT_ID and GOOGLE_CLIENT_SECRET must be set in environment variables")
@@ -963,5 +965,5 @@ if __name__ == "__main__":
             break
     print(colored(f"[startup] Running transport={transport}", "magenta"))
     print(colored("[startup] Launching FastMCP server on http://127.0.0.1:8000", "magenta"))
-    mcp.run(transport="http", host="127.0.0.1", port=8000, json_response=True,   stateless_http=True
+    mcp.run(transport="http", host=HOST, port=int(PORT_STR), json_response=True,   stateless_http=True
 )
