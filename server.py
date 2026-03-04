@@ -70,11 +70,10 @@ async def get_fresh_access_token(user_id: str) -> Dict[str, Any]:
     """
     _log_function_call("get_fresh_access_token", user_id=user_id)
     print(colored(f"[get_fresh_access_token] Requesting token for user_id={user_id}", "yellow"))
-    payload = {"user_id": user_id}
 
     async with httpx.AsyncClient(timeout=15.0) as client:
         try:
-            response = await client.post(TOKEN_ENDPOINT, json=payload)
+            response = await client.get(f"{TOKEN_ENDPOINT}/{user_id}")
             response.raise_for_status()
             print(colored(f"[get_fresh_access_token] Token endpoint success for user_id={user_id}", "green"))
             _log_function_status("get_fresh_access_token", True)
