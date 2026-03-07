@@ -21,7 +21,7 @@ from fastmcp import FastMCP
 from mcp.types import ToolAnnotations
 
 # Environment / configuration
-TOKEN_ENDPOINT = "https://accountio-backend.komyosys.ai/google/get_token"
+TOKEN_ENDPOINT = "https://api.accountio.ai/google/get_token"
 
 # These should come from environment variables in production
 GOOGLE_CLIENT_ID = os.environ.get("GOOGLE_CLIENT_ID")
